@@ -1,0 +1,63 @@
+<html>
+<link href="./diet.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="calcu" content="width=device-width, initial-scale=1.0">
+ <head>
+ 	<h1>Diet Planner</h1>
+ 	<h2>Ultimate Destination</h2>
+ </head>
+ <body class="Momentscal">
+    <div id="alter1">
+     <form method="get">                   <!--to view existing user data-->
+       <p style="font-weight: bold;">See your progress here</p>
+      <p>
+        <label for="uname1">USERNAME</label>
+        <br>
+        <input id="uname1" type="text" name="uname1"/>
+      </p>    
+      <p>
+      <input type="button" value="Checkout" id="btn1" onclick="seeold()"/>
+      </p>
+      <div id="report" style="font-weight: bold;">
+      <p id="ouname"></p>
+      <p id="oage"></p>
+      <p style="font-weight:bold;">Your current Diet</p>
+      <p id="foodie"></p>
+      <table>
+        <strong>
+          <tr><td>Points</td><td>Water Intake</td><td>BMI</td><td>Calorie Intake</td></tr>
+          <tr><td>Current</td><td id="oh2oin"></td><td id="bmi1"></td><td id="ocaltot"></td></tr>
+          <tr><td>Suggested</td><td id="sug1"></td><td id="sug2"></td><td id="sug3"></td></tr>
+        </strong>
+      </table>
+      <p id="suggestion"></p>
+      </div>
+     </form>
+    </div>
+    <div id ="alter2">
+     <form method="get">               <!--alters the local sotrage-->
+        <p style="font-weight: bold;">Changed your Diet? Make a record of it </p>
+        <p>
+        <label for="uname">USERNAME</label>
+        <br>
+        <input id="uname" type="text" name="uname"/>
+        </p>    
+        <p>
+        <label for="fooname1">Food Name</label>
+        <br>
+        <input id="fooname1" type="text" name="fooname1"/>
+        </p>    
+        <p>
+        <label for="cal1">Calorie Content</label>
+        <br>
+        <input id="cal1" type="number" name="cal1"/>
+        </p>    
+        <p>  
+        <input type="submit" value="ADD" onclick="addfoodheal()"/>                   <!--to add the mentioned item-->
+        <input type="submit" value="REMOVE" onclick="removefoodheal()"/>               <!--to remove the mentioned item-->
+        </p>
+     </form>
+    </div>
+ <script src="./diet.js"></script>
+ <body/>	
+</html> 

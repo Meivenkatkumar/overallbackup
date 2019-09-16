@@ -1,0 +1,95 @@
+import socket 
+import select 
+import sys 
+from thread import *
+import mysql.connector
+
+db = mysql.connector.connect(host="localhost",user="phpmyadmin",passwd="Meiven212!",database="chatroom")
+cursor=db.cursor(buffered=True)
+admin = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+admin.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+  
+IP_address=socket.gethostbyname(socket.gethostname())
+ 
+Port = 3333 
+
+admin.bind((IP_address, Port)) 
+
+admin.listen(10) 
+
+f=open('file.txt', 'a+')
+  
+list_of_clients = [] 
+  
+def clientthread(conn, addr): 
+    loop='true'
+    while loop:
+        mode=conn.recv(3333)
+        username=conn.recv(3333)
+        passwd=conn.recv(3333)
+        if mode=="signup":
+            sql="SELECT * FROM chatroom WHERE user=%s"
+            val=(username,)
+            cursor.execute(sql,val)
+            row=cursor.fetchone()
+            if row is not None:
+                conn.send("0")
+                continue
+            else:
+              sql="INSERT INTO chatroom (user,pwd) VALUES (%s,%s)"
+              val=(username,passwd)
+              cursor.execute(sql,val)
+              db.commit()
+              conn.send("1")
+              loop='false'
+              break
+        elif mode=="login":
+            sql="SELECT * FROM chatroom WHERE user=%s AND pwd=%s"
+            val=(username,passwd)
+            cursor.execute(sql,val)
+            row=cursor.fetchone()
+            if row is not None:
+                conn.send("1")
+                loop='false'
+            else:
+                conn.send("0")
+                continue
+        if loop=='false':
+            conn.send("Welcome to this chatroom!") 
+            message_to_send= addr[0] + " is online now"
+            broadcast(message_to_send, conn)
+            while True: 
+              try: 
+                message = conn.recv(3333) 
+                if message: 
+                    print "<" + addr[0] + "> " + message 
+                    message_to_send = message 
+                    broadcast(message_to_send, conn) 
+                    f.write("<" + addr[0] + ">" + message)  
+                else: 
+                    remove(conn) 
+  
+              except: 
+                continue
+  
+
+def broadcast(message, connection): 
+    for clients in list_of_clients: 
+        if clients!=connection: 
+            try: 
+                clients.send(message) 
+            except: 
+                clients.close()  
+                remove(clients) 
+def remove(connection): 
+    if connection in list_of_clients: 
+        list_of_clients.remove(connection) 
+  
+while True: 
+    conn, addr = admin.accept() 
+    list_of_clients.append(conn) 
+    print addr[0] + " connected" 
+    start_new_thread(clientthread,(conn,addr))     
+  
+conn.close() 
+admin.close() 

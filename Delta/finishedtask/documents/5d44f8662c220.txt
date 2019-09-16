@@ -1,0 +1,104 @@
+<?php 
+
+$content = file_get_contents("php://input");
+try{
+$ida=array();
+$namea=array();
+$memra=array();
+$cpura=array();
+$stimea=array();
+$timra=array();
+$statea=array();
+$data = json_decode($content);
+$rid= $data->requestid;
+$cpur= $data->cpu_required;
+$memr= $data->memory_required;
+$timr= $data->time_required;
+$servername = "localhost";
+$username = "phpmyadmin";
+$password = "";
+$dbname = "CERN";
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+$sql="SELECT Id, State, allocated_node_name, Starttime, CPU_required, Memory_required, time_required_for_completion FROM Requests";   
+$options=$conn->query($sql);
+if($options->num_rows>0)
+{   
+  $i=0;
+   while($row=$options->fetch_assoc())
+   {
+      array_push($ida,$row["Id"]);
+      array_push($namea,$row["allocated_node_name"]);
+      array_push($memra,$row["Memory_required"]);
+      array_push($cpura,$row["CPU_required"]);
+      array_push($stimea,$row["Starttime"]);
+      array_push($timra,$row["time_required_for_completion"]);
+      array_push($statea,$row["State"]);
+      $i+=1;
+   }
+   $i-=1;
+   while($i>=0)
+   {
+      $sql="SELECT Available_CPUs, Available_Memory FROM nodes WHERE Name=".$namea[$i];
+      $row1=$conn->query($sql);
+      $cpua=$row1["Available_CPUs"];
+      $mema=$row1["Available_Memory"];
+      if((time()-$stimea[$i] >= $timr) && ($statea[$i] == 1))
+      {
+            $state=0;
+            $sql="UPDATE Requests SET State=".$state." WHERE Id=".$id[$i];
+            $conn->query($sql);
+            $sql="UPDATE nodes SET Available_CPUs=".$cpua + $cpur[$i]." Available_Memory=".$mema + $memr[$i]." WHERE Name=".$name[$i];
+            $conn->query($sql);
+      }
+      $i-=1;
+   }
+}
+
+$sql="SELECT Name, Available_CPUs, Available_Memory FROM nodes";    
+$options=$conn->query($sql);
+$check=0;
+if($options->num_rows>0)
+{
+      $memaa=array();
+      $cpua=array();
+      $namea=array();
+      $i=0;
+	while($row=$options->fetch_assoc())
+	{
+            $memaa=$row["Available_Memory"];
+            $cpuaa=$row["Available_CPUs"];
+            $namea=$row["Name"];
+      }
+      $i-=1;
+      while(($i>=0) && ($check===0))
+      {
+      $stime=time();
+            if(($memaa[$i] >= $memr) && ($cpuaa[$i] >= $cpur))
+            {
+                   $sql="INSERT INTO Requests (Id, allocated_node_name, Starttime, CPU_required, Memory_required, time_required_for_completion, State)
+                         VALUES (".$rid." ,'".$name."' ,".$stime." ,".$cpur." ,".$memr." ,".$timr." ,1)";
+                   $conn->query($sql);
+                   $sql="UPDATE nodes SET Available_CPUs=".$cpuaa[$i] - $cpur." Available_Memory=".$memaa[$i] - $memr." WHERE Name=".$namea[$i];
+                   $conn->query($sql);
+                   $check=1;
+                   $url = 'http://'.$name.'.com/index.php';                                 
+                   $ch = curl_init($url);
+                   curl_setopt($ch, CURLOPT_POSTFIELDS, $contents);
+                   curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                   $result = curl_exec($ch);
+                   curl_close($ch);
+            }
+      $i-=1;
+	}
+	if($check === 0)
+		{
+           echo "Can`t Handle";
+		}
+}
+$conn->close();
+}catch (Exception $error){
+
+}
+?>

@@ -1,0 +1,32 @@
+<html>
+<link href="./duet.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+ <body class="Moments">
+ 	<div id="cover">
+ 	<form>
+ 	<p>Enter playername</p>
+    <input type="text" id="username"/>
+    <br>
+ 	<input type="button" value="SOLO" id="solo" onclick="gamearea(),playsolo()"/>
+    <br>
+ 	<p>Enter player1 name</p>
+ 	<input type="text" id="username1"/><br>
+ 	<p>Enter player2 name</p><br>
+ 	<input type="text" id="username2"/><br>
+ 	<input type="button" value="DUAL" id="dual" onclick="gamearea(),playdual()"/>
+ </form>
+ </div>
+   <div id="gamearea">
+   	<div id="scoreboard">
+   		<table id="SB">
+   			 <tr>
+                 <td>PLAYER</td>
+                 <td>SCORE</td>
+             </tr>
+   		</table>
+    </div>
+   	<canvas></canvas>
+   </div>
+<script type="text/javascript" src="canvas.js"></script>
+<body/>	
+</html>

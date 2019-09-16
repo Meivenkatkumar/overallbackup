@@ -1,0 +1,81 @@
+<html>
+<link href="./diet.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+ <head>
+ 	<h1>Diet Planner</h1>
+ 	<h2>Ultimate Destination</h2>
+ </head>
+ <body class="Moments">
+ <div id="comp">
+    <form name="Diet" method="get">          <!--creates new user in local storage-->
+    <div id="first">
+ 	<p>
+ 	<label for="name1">Name</label>
+    <br>
+ 	<input id="name1" type="text" name="name1" placeholder="Username" />
+    </p>
+    <p>
+ 	<label for="Age">Age</label>
+    <br>
+ 	<input id="Age" type="number" name="Age" placeholder="in years" />
+    </p>
+    <p>
+ 	<label for="Height">Height</label>
+    <br>
+ 	<input id="Height" type="number" name="Height" placeholder="in cms" />
+    </p>
+    <p>
+ 	<label for="Weight">Weight</label>
+    <br>
+ 	<input id="Weight" type="number" name="Weight" placeholder="in kg" />
+    </p>
+    <p>
+ 	<label for="H2OIN">Water intake</label>
+    <br>
+ 	<input id="H2OIN" type="number" name="H2OIN" placeholder="litres per day" />
+    </p>
+    <p>
+ 	<label for="foodname1">Food Name</label>
+    <br>
+ 	<input id="foodname1" type="text" name="foodname1" />
+    </p>
+    <p>
+ 	<label for="Calin1">Calorie content</label>
+    <br>
+ 	<input id="Calin1" type="number" name="Calin1" placeholder="in Kcal" />
+    </p>
+    <p>
+    <label for="foodname2">Food Name</label>
+    <br>
+    <input id="foodname2" type="text" name="foodname2"/>
+    </p>
+    <p>
+    <label for="Calin2">Calorie content</label>
+    <br>
+    <input id="Calin2" type="number" name="Calin2" placeholder="in Kcal" />
+    </p>
+    <p>
+    <label for="foodname3">Food Name</label>
+    <br>
+    <input id="foodname3" type="text" name="foodname3"/>
+    </p>
+    <p>
+    <label for="Calin3">Calorie content</label>
+    <br>
+    <input id="Calin3" type="number" name="Calin3" placeholder="in Kcal" />
+    </p>
+    </div>
+    <p>
+    <input type="button" value="Checkout" id="btn0" onclick="createuser()" />
+    <input type="button" value="Reset" id="btn10" onclick="clearstorage()" />
+    </p>
+     <p id="caltot"></p>
+     <p>Dont forget to save your progress</p>
+    <h2>Save your Progress</h1>
+    <br>
+      <input type="button" value="SAVE" id="btn2" onclick="saveheal()" />
+    </form>
+</div>
+ <script src="./diet.js"></script>
+ <body/>	
+</html> 

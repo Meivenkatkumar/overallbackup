@@ -1,0 +1,57 @@
+import socket 
+import select 
+import sys 
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+IP_address="127.0.1.1"
+Port = 3333
+server.connect((IP_address, Port)) 
+f=open('file.txt', 'a+')
+loop='true'
+while (loop=='true'):
+  if sys.argv[1]=='signup':
+     server.send(sys.argv[1])
+     username = raw_input("Username: ")
+     server.send(username)
+     password = raw_input("Password: ")
+     repassword = raw_input("Re-enter Password: ")
+     if password==repassword:
+        server.send(password)
+        message=server.recv(3333)
+        if message=="1":
+           loop='false'
+        else:
+          print "Username Already Exists"
+     else:
+        print "Password did not match"
+  else:
+    mode='login':
+    server.send(mode)
+    username = raw_input("Username: ")
+    server.send(username)
+    password= raw_input("Password: ") 
+    server.send(password)   
+    message=server.recv(3333)
+    if message=="1":
+      print "login success"
+      loop='false'
+      break
+    else:
+      print "Invalid Users"
+if loop=='false':
+   while True: 
+    sockets_list = [sys.stdin, server] 
+    read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) 
+    for sockett in read_sockets: 
+        if sockett == server: 
+            message = sockett.recv(3333) 
+            print message 
+        else: 
+            message = sys.stdin.readline() 
+            message =  username + " : " + message
+            server.send(message) 
+            sys.stdout.write("<You>") 
+            sys.stdout.write(message) 
+            sys.stdout.flush() 
+        f.write(message)
+server.close() 

@@ -1,0 +1,15 @@
+#gamearea{
+	margin-left: 33.3333%;
+	margin-right: 33.3333%;
+	text-align: center;
+	width:33.3333%;
+	height: 100%;
+	display: none;
+}
+canvas{
+	border:10px solid red;
+	margin-left: 33.3333%
+}
+#cover{
+	display:block;
+}

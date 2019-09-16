@@ -1,0 +1,5 @@
+RewriteEngine on
+
+rewritecond %{http_host} ^domain.com [nc]
+
+rewriterule ^(.*)$ http://www.domain.com/$1 [r=302,nc]

@@ -1,0 +1,1 @@
+35 13 * * * mysqldump -u root -pMeiven212! mysqldump --databases project > /var/backups/mysqlbackup/backup_$(date "+\%Y-\%m-\%d").sql

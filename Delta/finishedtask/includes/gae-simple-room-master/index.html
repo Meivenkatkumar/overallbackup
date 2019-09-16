@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+	<title>Vidyo.io Connector</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="stylesheet" type="text/css" href="/css/room.css">
+	<script type="text/javascript">
+		function joinRoom(connectorType) {
+			// RoomID must not contain special characters or spaces.
+			var roomId      = document.getElementById ('room_name').value;
+			var displayName = document.getElementById ('display_name').value;
+
+			// Pass on the URL query parameters 
+			if (window.location.search) {
+				var url =  "/" + encodeURIComponent(roomId) + window.location.search + "&displayName=" + encodeURIComponent(displayName) + "&connectorType=" + connectorType;
+			} else {
+				var url =  "/" + encodeURIComponent(roomId) + "?displayName=" + encodeURIComponent(displayName) + "&connectorType=" + connectorType;
+			}
+
+			// Redirect to the new URL
+			window.location.href = url;
+			return false;
+		};
+	</script>
+</head>
+<body>
+	<img class="logo" src="https://static.vidyo.io/latest/connector/Images/VidyoIcon.png"/>
+	{% if roomId %}
+	<h1>What is your name?</h1>
+	<form onsubmit="return joinRoom(this.connectorType)">
+		<input type="text" name="display_name" id="display_name" placeholder="your name">
+		<br />
+		<input type="hidden" name="room_name" id="room_name" value="{{ roomId }}">
+		<br />
+		<input onclick="this.form.connectorType=this.name;" type="submit" name="browser" value="Join via the browser">
+		<input onclick="this.form.connectorType=this.name;" type="submit" name="app" value="Join via the app">
+	</form>
+	{% else %}
+	<h1>What room would you like to join?</h1>
+	<form onsubmit="return joinRoom(this.connectorType)">
+		<input type="text" name="display_name" id="display_name" placeholder="your name">
+		<br />
+		<input type="text" name="room_name" id="room_name" placeholder="room name">
+		<br />
+		<input onclick="this.form.connectorType=this.name;" type="submit" name="browser" value="Join via the browser">
+		<input onclick="this.form.connectorType=this.name;" type="submit" name="app" value="Join via the app">
+	</form>
+	{% endif %}
+</body>
+</html>
+{% endautoescape %}

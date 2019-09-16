@@ -1,0 +1,63 @@
+<?php
+session_start();
+if(isset($_SESSION['NAME']))
+{
+  if(isset($_POST['delete']))
+  {
+  	require 'db.php';
+	$name=$_SESSION['NAME'];
+	$expn=$_POST['expdn'];
+  $expid=(int)$_POST['expid'];
+  if(empty($expn) || empty($expid))
+    {
+      header("Location:../profile.php?error=empty");
+      exit();
+    }
+  $stmt=mysqli_stmt_init($conn);
+  $sql="SELECT * FROM ".$name." WHERE expname='".$expn."' AND id=".$expid;
+  if(!$conn->query($sql))
+  {
+    header("Location:../profile.php?error=dberror");
+    exit();
+  }
+  else
+  {
+    $rows=$conn->query($sql);
+    $num=$rows->num_rows;
+    if($num>0)
+    {
+      $sql="DELETE FROM ".$name." WHERE expname=? AND id=?";
+      if(!mysqli_stmt_prepare($stmt,$sql))
+      {
+        header("Location:../profile.php?error=dberror");
+        exit();
+      }
+      else
+      {
+      mysqli_stmt_bind_param($stmt, "si", $expn, $expid);
+        mysqli_stmt_execute($stmt);
+        header("Location:../profile.php?success=deletedexp");
+      exit();
+      }
+    }
+    else
+    {
+      header("Location:../profile.php?error=noentry");
+        exit();
+    }
+  }
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
+  }
+  else
+  {
+  header("Location:../index.php?error=wrngaccess");
+  exit();
+  }
+}
+else
+{
+header("Location:../index.php?error=wrngaccess");
+exit();
+}
+?>
